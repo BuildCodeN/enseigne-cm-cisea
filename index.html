@@ -28,6 +28,7 @@ header p{font-size:13px;opacity:.75}
 #signbox{position:absolute;inset:0}
 .mask{-webkit-mask-size:100% 100%;mask-size:100% 100%}
 #emis,#emisT{opacity:0}
+#relief{will-change:filter}
 #gloss{mix-blend-mode:soft-light;opacity:.45;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.9) 46%,transparent 62%)}
 #bloom,#bloomA{mix-blend-mode:screen;opacity:0;background-size:100% 100%}
 /* éclairage porté sur le mur sous l'enseigne */
@@ -72,6 +73,7 @@ input[type=range]{flex:1;min-width:160px;accent-color:var(--teal);height:24px}
   <img id="halo2" alt="">
   <div id="signbox">
    <img id="sign" alt="Enseigne Cm-Cisea" src="">
+   <img id="relief" alt="" src="">
    <img id="emis" alt="" src="">
    <img id="emisT" alt="" src="">
    <div id="bloomA"></div>
@@ -114,7 +116,7 @@ const GEOM=[[1.87,96.23,18.21],[1.77,96.23,18.21],[1.87,96.23,18.28],[1.87,96.23
 let P=0;
 function setProp(i){P=i;const S=SIGNS[i],g=GEOM[i];
  const w=$('signwrap');w.style.left=g[0]+'%';w.style.width=g[1]+'%';w.style.top=g[2]+'%';
- $('sign').src=S.s;['emis','halo'].forEach(id=>$(id).src=S.a);['emisT','halo2'].forEach(id=>$(id).src=S.t);$('desc').textContent=DESC[i];
+ $('sign').src=S.s;['emis','halo'].forEach(id=>$(id).src=S.a);['relief','emisT','halo2'].forEach(id=>$(id).src=S.t);$('desc').textContent=DESC[i];
  const gl=$('gloss');gl.style.webkitMaskImage=gl.style.maskImage='url('+S.s+')';$('bloom').style.backgroundImage='url('+S.t+')';$('bloomA').style.backgroundImage='url('+S.a+')';
  document.querySelectorAll('button[data-p]').forEach(x=>x.classList.toggle('on',+x.dataset.p===i));}
 const st=$('stars');let seed=11;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;for(let i=0;i<70;i++){const s=document.createElement('div');s.className='star';s.style.left=rnd()*100+'%';s.style.top=rnd()*100+'%';s.style.opacity=.35+rnd()*.65;st.appendChild(s);}
@@ -145,15 +147,21 @@ function render(){
  $('moon').style.opacity=night;$('stars').style.opacity=night*.55;
  $('photo').style.filter=`saturate(${.55+.45*L})`;
  const g=power?ss(clamp((.80-L)/.55)):0;
-const unlit=.34+.66*L;
+const unlit=.24+.76*L;
  $('sign').style.filter=`brightness(${unlit}) saturate(${.85+.15*L}) drop-shadow(0 .45cqw .7cqw rgba(0,0,0,${.4*L*(1-g)}))`;
  $('emis').style.opacity=g;
  $('emis').style.filter=`brightness(${1+.28*g}) saturate(${1+.7*g}) contrast(${1+.1*g})`;
  $('emisT').style.opacity=g;
- $('emisT').style.filter=`brightness(${1+1.1*g}) contrast(${1+.15*g})`;
- $('bloom').style.opacity=g;$('bloom').style.filter=`blur(.3cqw) brightness(2.4)`;
+ $('emisT').style.filter=`brightness(${1+1.9*g}) contrast(${1+.2*g})`;
+ {const side=[150,168,172].map((v,i)=>Math.round(lerp(v*(.55+.45*L),[205,226,238][i],g)));
+  const c=`rgb(${side})`;let f='';
+  for(let i=0;i<5;i++)f+=`drop-shadow(.04cqw .045cqw 0 ${c}) `;
+  f+=`drop-shadow(.22cqw .32cqw .3cqw rgba(0,10,14,${.5*(1-.35*g)}))`;
+  $('relief').style.filter=`brightness(${unlit<1?(.5+.5*unlit):1}) ${f}`;
+  $('relief').style.opacity=1;}
+ $('bloom').style.opacity=g;$('bloom').style.filter=`blur(.3cqw) brightness(3.4)`;
  $('bloomA').style.opacity=.65*g;$('bloomA').style.filter=`blur(.3cqw) brightness(1.5) saturate(2)`;
- $('halo2').style.opacity=.95*g;$('halo2').style.filter=`blur(.8cqw) brightness(2.6)`;
+ $('halo2').style.opacity=1*g;$('halo2').style.filter=`blur(.7cqw) brightness(3.2)`;
  $('halo').style.opacity=.95*g;$('halo').style.filter=`blur(1.5cqw) saturate(2.2) brightness(1.8)`;
  $('gloss').style.opacity=.45*L*(1-g*.7);
  $('wash').style.opacity=.2*g;$('washL').style.opacity=0;$('road').style.opacity=.45*g;
