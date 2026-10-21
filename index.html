@@ -29,7 +29,8 @@ header p{font-size:13px;opacity:.75}
 #signbox{position:absolute;inset:0}
 .mask{-webkit-mask-size:100% 100%;mask-size:100% 100%}
 #emis,#emis2,#emisT,#emisT2,#reliefN{opacity:0}
-#emis2,#emisT2{mix-blend-mode:screen}
+#emis2{mix-blend-mode:hard-light}
+#emisT2{mix-blend-mode:screen}
 #dim{background:#000;border-radius:1.25% / 9.8%;opacity:0}
 #sshadow{border-radius:1.25% / 9.8%}
 #gloss{border-radius:1.25% / 9.8%;mix-blend-mode:soft-light;opacity:.45;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.9) 46%,transparent 62%)}
@@ -80,10 +81,10 @@ input[type=range]{flex:1;min-width:160px;accent-color:var(--teal);height:24px}
    <img id="sign" alt="Enseigne Cm-Cisea" src="">
    <img id="reliefD" alt="" src="">
    <div id="dim"></div>
-   <img id="reliefN" alt="" src="">
    <img id="emis" alt="" src="">
-   <img id="emis2" alt="" src="">
+   <img id="reliefN" alt="" src="">
    <img id="emisT" alt="" src="">
+   <img id="emis2" alt="" src="">
    <img id="emisT2" alt="" src="">
    <div id="bloomA"></div>
    <div id="bloom"></div>
@@ -159,12 +160,12 @@ function render(){
 const unlit=.24+.76*L;
  $('dim').style.opacity=1-unlit;
  $('sshadow').style.boxShadow=`0 .45cqw .7cqw rgba(0,0,0,${.4*L*(1-g)})`;
- $('emis').style.opacity=g;$('emis2').style.opacity=.4*g;
- $('emisT').style.opacity=g;$('emisT2').style.opacity=.7*g;
+ $('emis').style.opacity=g;$('emis2').style.opacity=.85*g;
+ $('emisT').style.opacity=g;$('emisT2').style.opacity=.5*g;
  $('reliefN').style.opacity=g;
- $('bloom').style.opacity=g;$('bloom').style.filter=`blur(.3cqw) brightness(3.4)`;
- $('bloomA').style.opacity=.65*g;$('bloomA').style.filter=`blur(.3cqw) brightness(1.5) saturate(2)`;
- $('halo2').style.opacity=1*g;$('halo2').style.filter=`blur(.7cqw) brightness(3.2)`;
+ $('bloom').style.opacity=.4*g;$('bloom').style.filter=`blur(.2cqw) brightness(2)`;
+ $('bloomA').style.opacity=.35*g;$('bloomA').style.filter=`blur(.3cqw) brightness(1.5) saturate(2)`;
+ $('halo2').style.opacity=.6*g;$('halo2').style.filter=`blur(.7cqw) brightness(2.6)`;
  $('halo').style.opacity=.95*g;$('halo').style.filter=`blur(1.5cqw) saturate(2.2) brightness(1.8)`;
  $('gloss').style.opacity=.45*L*(1-g*.7);
  $('wash').style.opacity=.2*g;$('washL').style.opacity=0;$('road').style.opacity=.45*g;
